@@ -16,14 +16,16 @@ _FOSCSEL(FNOSC_FRC);
 _FOSC(FCKSM_CSECMD & OSCIOFNC_OFF & POSCMD_XT);
 _FWDT(FWDTEN_OFF);
 #pragma config ALTI2C = ON              // Alternate I2C  pins (I2C mapped to ASDA1/ASCL1 pins)
-
+//defino funciones
 void paso (void);
 void ConfigIni(void);
 void ConfigI2C(void);
 void ConfigUart(void);
 void EnvioUart (void);
 void EnviarI2C (unsigned char auxiliar );
-
+//defino variables 
+unsigned char aux;
+//funcion main
 void main(void){
     ConfigIni();
     ConfigI2C();
@@ -53,7 +55,7 @@ void main(void){
     paso();
     while(I2C1STATbits.RBF==0){}
     paso();
-    unsigned char aux=I2C1RCV;
+    aux=I2C1RCV;
     I2C1CONbits.ACKDT=1;
     I2C1CONbits.ACKEN=1;
     while(I2C1CONbits.ACKEN==1){}
@@ -66,12 +68,13 @@ void main(void){
                 U1TXREG = 0x0D;//manda un enter
                 }
     else{
-          U1TXREG= '0'; //0 si no es el id
-          while(IFS0bits.U1TXIF==0){}
-         IFS0bits.U1TXIF=0;
-           U1TXREG = 0x0D;//manda un enter 
+        U1TXREG= '0'; //0 si no es el id
+        while(IFS0bits.U1TXIF==0){}
+        IFS0bits.U1TXIF=0;
+        U1TXREG = 0x0D;//manda un enter 
         }
     I2C1CONbits.ACKDT=0;
+}
 }
 
 void ConfigIni (void) {
