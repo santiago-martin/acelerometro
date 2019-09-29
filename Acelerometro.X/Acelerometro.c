@@ -29,9 +29,9 @@ void main(void){
     ConfigI2C();
     ConfigUart();
     U1TXREG = 'I'; // inicio de comunicacion
-                while(IFS0bits.U1TXIF==0){}
-                IFS0bits.U1TXIF=0;
-                U1TXREG = 0x0D;//manda un enter
+    while(IFS0bits.U1TXIF==0){}
+    IFS0bits.U1TXIF=0;
+    U1TXREG = 0x0D;//manda un enter
     while (1){
     I2C1CONbits.SEN=1;
     while (I2C1CONbits.SEN==1){}
@@ -51,7 +51,7 @@ void main(void){
     EnviarI2C(0x39);
     while (I2C1STATbits.ACKSTAT==1){}
     paso();
-    while(I2C1STATbits.RBF ==0){}
+    while(I2C1STATbits.RBF==0){}
     paso();
     unsigned char aux=I2C1RCV;
     I2C1CONbits.ACKDT=1;
@@ -64,16 +64,15 @@ void main(void){
                 while(IFS0bits.U1TXIF==0){}
                 IFS0bits.U1TXIF=0;
                 U1TXREG = 0x0D;//manda un enter
-                    }
-      else{
+                }
+    else{
           U1TXREG= '0'; //0 si no es el id
           while(IFS0bits.U1TXIF==0){}
          IFS0bits.U1TXIF=0;
-           U1TXREG = 0x0D;//manda un enter
-                    }
-           }
+           U1TXREG = 0x0D;//manda un enter 
+        }
     I2C1CONbits.ACKDT=0;
-    }
+}
 
 void ConfigIni (void) {
     // Configure Oscillator to operate the device at 40 MHz
@@ -128,7 +127,6 @@ void EnvioUart(void){
 }
 void EnviarI2C (unsigned char auxiliar){
     if (I2C1STATbits.TRSTAT==0){
-        
         I2C1TRN=auxiliar;
         while(I2C1STATbits.TBF==1){}
         while (I2C1STATbits.TRSTAT==1){}   
