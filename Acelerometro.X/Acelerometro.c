@@ -34,24 +34,22 @@ void main(void){
     while(IFS0bits.U1TXIF==0){}
     IFS0bits.U1TXIF=0;
     U1TXREG = 0x0D;//manda un enter
-    while (1){
     I2C1CONbits.SEN=1;
     while (I2C1CONbits.SEN==1){}
     EnviarI2C(0x38);
     paso();
     while (I2C1STATbits.ACKSTAT==1){}
     paso();
-    __delay_ms(1);
     EnviarI2C(0x0D);
     while (I2C1STATbits.ACKSTAT==1){}
-    __delay_ms(1);
     paso();
     I2C1CONbits.RSEN=1;
     while (I2C1CONbits.RSEN==1){}
-    __delay_ms(1);
     paso();
     EnviarI2C(0x39);
     while (I2C1STATbits.ACKSTAT==1){}
+     I2C1CONbits.RCEN=1;
+    while (I2C1CONbits.RCEN==1){}
     paso();
     while(I2C1STATbits.RBF==0){}
     paso();
@@ -66,15 +64,19 @@ void main(void){
                 while(IFS0bits.U1TXIF==0){}
                 IFS0bits.U1TXIF=0;
                 U1TXREG = 0x0D;//manda un enter
+                while(IFS0bits.U1TXIF==0){}
+                IFS0bits.U1TXIF=0;
                 }
     else{
         U1TXREG= '0'; //0 si no es el id
         while(IFS0bits.U1TXIF==0){}
         IFS0bits.U1TXIF=0;
         U1TXREG = 0x0D;//manda un enter 
+        while(IFS0bits.U1TXIF==0){}
+                IFS0bits.U1TXIF=0;
         }
     I2C1CONbits.ACKDT=0;
-}
+    while(1){}
 }
 
 void ConfigIni (void) {
@@ -119,7 +121,7 @@ void ConfigUart(void){
     U1MODEbits.PDSEL = 0; // No Parity, 8-Data bits
     U1MODEbits.ABAUD = 0; // Auto-Baud disabled
     U1MODEbits.BRGH = 0; // Standard-Speed mode
-    U1BRG = BRGVAL; // Baud Rate setting for 19200
+    U1BRG = 129; // Baud Rate setting for 19200
     U1STAbits.UTXISEL0 = 0; // Interrupt after one TX character is transmitted
     U1STAbits.UTXISEL1 = 0;
     IEC0bits.U1TXIE = 0; // Enable UART TX interrupt
@@ -140,4 +142,6 @@ void paso (void){
     while(IFS0bits.U1TXIF==0){}
                 IFS0bits.U1TXIF=0;
                 U1TXREG = 0x0D;//manda un enter
+                while(IFS0bits.U1TXIF==0){}
+                IFS0bits.U1TXIF=0;
 }
