@@ -89,7 +89,6 @@ void main(void){
 //funciones
 void configini (void){
     IEC0bits.U1RXIE=1;
-    
 }
 void aEnviarI2C (unsigned char auxiliar){
     if (I2C1STATbits.TRSTAT==0){
