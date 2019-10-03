@@ -20,9 +20,9 @@ void configini (void);
 void configUARTPC (void);
 void configI2C (void);
 void aEnviarI2C (unsigned char auxiliar);
+void aSepararTrama(void);
 //defino variables 
-unsigned char vEstado=0;
-
+unsigned char vEstado=0,vLeer=0,vFD=0,vCantbits=0;
 //defino Estados
 #define ESPERANDOINSTRUCCION 0
 #define INST1 0x41
@@ -38,14 +38,19 @@ unsigned char vEstado=0;
 //funcion interrupcion 
 void __attribute__((__interrupt)) _U1RXInterrupt(void){
     
+    vLeer=1;
 }
 //codigo principal (DIAGRAMA DE ESTADOS)
 void main(void){
     while(1){
         switch (vEstado){
+            
                 case ESPERANDOINSTRUCCION:
-                    
-                    break;
+                    if(vLeer==1){
+                    aSepararTrama();
+                    vLeer=0;
+                    }
+                   break;
                     
                 case INST1:
                         
@@ -120,4 +125,13 @@ void ConfigUart(void){
     U1STAbits.UTXEN = 1; // Enable UART TX
     U1STAbits.URXISEL0=0; 
     U1STAbits.URXISEL1=1;//INTERRUMPE DESPUES DE 3 RECEPCIONES
+}
+void aSepararTrama(void){
+    vFD=U1RXREG;
+    vCantbits=U1RXREG;
+    if (vFD==0xFD){
+        if (vCantbits==0x03){
+            vEstado=U1RXREG;
+        }
+    }
 }
