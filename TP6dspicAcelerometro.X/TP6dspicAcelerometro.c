@@ -84,8 +84,6 @@ void main(void){
         }
     }
 }
-
-
 //funciones
 void configini (void){
     IEC0bits.U1RXIE=1;
