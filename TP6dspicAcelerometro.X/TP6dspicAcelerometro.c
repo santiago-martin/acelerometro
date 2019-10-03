@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <p33fj128gp202.h>
+#include <p33fj128MC202.h>
 #define FCY 40000000UL//
 #include <libpic30.h>
 _FICD(ICS_PGD2 & JTAGEN_OFF); // Para hacer debuging por el puerto 2
@@ -25,16 +25,16 @@ unsigned char vEstado=0;
 
 //defino Estados
 #define ESPERANDOINSTRUCCION 0
-#define INST1 1
-#define INST2 2
-#define INST3 3
-#define INST4 4
-#define INST5 5
-#define INST6 6
-#define INST7 7
-#define INST8 8 
-#define INST9 9
-#define INST10 10
+#define INST1 0x41
+#define INST2 0x42
+#define INST3 0x43
+#define INST4 0x44
+#define INST5 0x45
+#define INST6 0x46
+#define INST7 0x47
+#define INST8 0x48 
+#define INST9 0x49
+#define INST10 0x4A
 //funcion interrupcion 
 void __attribute__((__interrupt)) _U1RXInterrupt(void){
     
